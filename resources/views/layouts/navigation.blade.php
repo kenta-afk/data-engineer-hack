@@ -22,7 +22,10 @@
                         {{ __('Chat') }}
                     </x-nav-link>
                     <x-nav-link :href="route('profile.show', auth()->user())" :active="request()->routeIs('profile.show')">
-                        {{ __('マイページ') }}
+                        {{ __('mypage') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('index.show')">
+                        {{ __('ユーザー一覧') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -86,7 +89,10 @@
                 {{ __('Chat') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('profile.show', auth()->user())" :active="request()->routeIs('profile.show')">
-                {{ __('マイページ') }}
+                {{ __('mypage') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('index.show')">
+                {{ __('ユーザー一覧') }}
             </x-responsive-nav-link>
         </div>
 
