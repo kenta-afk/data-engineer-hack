@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/friend/{user}', [FriendController::class, 'store'])->name('friend.store');
     Route::delete('/friend/{user}', [FriendController::class, 'destroy'])->name('friend.destroy');
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/users', [UserController::class, 'index'])->name('user.index');
 
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 });
