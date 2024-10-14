@@ -1,0 +1,1 @@
+<h1>chat/index.blade.php</h1>
