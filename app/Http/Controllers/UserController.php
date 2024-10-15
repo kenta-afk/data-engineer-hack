@@ -10,10 +10,18 @@ class UserController extends Controller
     public function index()
     {
         // データベースから全てのユーザーを取得
-        $users = User::all();
+        $users = User::with('followers')->get();
 
-        // usersビューにユーザーのデータを渡す
+        // users.indexビューにユーザーのデータを渡す
         return view('users.index', compact('users'));
+    }
+    public function destroy(User $follower)
+    {
+        // 認証ユーザーがフォローを解除
+        auth()->user()->followers()->detach($follower->id);
+
+        // リダイレクトする
+        return redirect()->route('users.index')->with('success', 'フォローを解除しました。');
     }
     // 検索機能
     public function search(Request $request)
@@ -32,5 +40,12 @@ class UserController extends Controller
 
         // users.search ビューにデータを渡す
         return view('users.search', compact('users'));
-}
+    }
+
+
+
+    public function show(User $user)
+    {
+        return view('user.index', compact('user'));
+    }
 }
