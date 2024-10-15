@@ -25,8 +25,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/friend/{user}', [FriendController::class, 'destroy'])->name('friend.destroy');
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    
 
+    // ユーザー一覧を表示するルート
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+
+    // 選択されたユーザーとのチャット画面を表示するルート
+    Route::get('/chat/{user}', [ChatController::class, 'show'])->name('chat.show');
+
+    // メッセージ送信
+    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+
 });
 
 require __DIR__ . '/auth.php';
