@@ -34,6 +34,21 @@
           <a href="{{ route('profile.show', $user->id) }}" class="gray">
              {{ $user->name }}
           </a>
+          @if ($user->id !== auth()->id())
+                    @if ($user->followers->contains(auth()->id()))
+                    <form action="{{ route('friend.destroy', $user) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-500 hover:text-red-700">unFollow</button>
+                    </form>
+                    @else
+                    <form action="{{ route('friend.store', $user) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-blue-500 hover:text-blue-700">follow</button>
+                    </form>
+                    @endif
+
+                    @endif          
 
  
           </div>
