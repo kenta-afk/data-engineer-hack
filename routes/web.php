@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
     Route::post('/friend/{user}', [FriendController::class, 'store'])->name('friend.store');
     Route::delete('/friend/{user}', [FriendController::class, 'destroy'])->name('friend.destroy');
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
