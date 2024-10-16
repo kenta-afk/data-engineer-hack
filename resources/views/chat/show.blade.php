@@ -10,20 +10,20 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @foreach($chats as $chat)
-                        <div class="mb-4 flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
-                            <div class="max-w-xs">
-                                <!-- 名前をメッセージの上に固定 -->
-                                <p class="text-sm font-bold mb-1 {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
-                                    {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
+                    <div class="mb-4 flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
+                        <div class="max-w-xs">
+                            <!-- 名前をメッセージの上に固定 -->
+                            <p class="text-sm font-bold mb-1 {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                                {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
+                            </p>
+                            <!-- メッセージ内容 -->
+                            <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
+                                <p class="text-sm">
+                                    {{ $chat->message }}
                                 </p>
-                                <!-- メッセージ内容 -->
-                                <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
-                                    <p class="text-sm">
-                                        {{ $chat->message }}
-                                    </p>
-                                </div>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                 </div>
             </div>

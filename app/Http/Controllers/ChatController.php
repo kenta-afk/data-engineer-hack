@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
@@ -20,12 +21,12 @@ class ChatController extends Controller
     public function show(User $user)
     {
         // 認証ユーザーと選択されたユーザーとのチャット履歴を取得
-        $chats = Chat::where(function($query) use ($user) {
+        $chats = Chat::where(function ($query) use ($user) {
             $query->where('sender_id', auth()->id())
-                  ->where('receiver_id', $user->id);
-        })->orWhere(function($query) use ($user) {
+                ->where('receiver_id', $user->id);
+        })->orWhere(function ($query) use ($user) {
             $query->where('sender_id', $user->id)
-                  ->where('receiver_id', auth()->id());
+                ->where('receiver_id', auth()->id());
         })->get();
 
         return view('chat.show', [
@@ -51,4 +52,3 @@ class ChatController extends Controller
         return redirect()->back();
     }
 }
-?>
