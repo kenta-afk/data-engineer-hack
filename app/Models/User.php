@@ -56,4 +56,11 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'friends', 'follower_id', 'follow_id')
             ->withTimestamps();
     }
+
+
+    public function blocked()
+    {
+        return $this->belongsToMany(User::class, 'user_block', 'blocked_id', 'block_id')
+            ->withTimestamps();
+    }
 }

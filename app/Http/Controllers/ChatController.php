@@ -17,6 +17,7 @@ class ChatController extends Controller
         return view('chat.index', compact('users'));
     }
 
+
     // 選択したユーザーとのチャットを表示
     public function show(User $user)
     {
