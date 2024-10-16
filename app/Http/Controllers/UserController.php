@@ -9,10 +9,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        // データベースから全てのユーザーを取得
+
         $users = User::with('followers')->get();
 
-        // users.indexビューにユーザーのデータを渡す
+
         return view('users.index', compact('users'));
     }
     public function destroy(User $follower)

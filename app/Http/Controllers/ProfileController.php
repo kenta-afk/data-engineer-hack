@@ -58,8 +58,26 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
     public function show(User $user)
     {
+        // ユーザーがフォローしているユーザーのIDを取得
+        $followedUserIds = $user->follows()->pluck('follow_id')->toArray();
+
+        // フォロワーのうち、フォローしていないユーザーを取得
+        $nonMutualFollowers = $user->followers()
+            ->whereNotIn('follower_id', $followedUserIds)
+            ->get();
+
+        // ビューにデータを渡す
+        return view('profile.show', ['user' => $user, 'nonMutualFollowers' => $nonMutualFollowers]);
+    }
+
+
+    public function index(User $user)
+    {
+        $users = User::with('followers')->get();
+
         return view('profile.show', compact('user'));
     }
 }
