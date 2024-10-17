@@ -14,9 +14,7 @@
                     <p class="text-gray-800 dark:text-gray-300 text-lg">
                         {{ $user->name }} <!-- ユーザーの名前 -->
                     </p>
-                    <div class="text-gray-600 dark:text-gray-400 text-sm">
-                        <p>アカウント作成日時: {{ $user->created_at->format('Y-m-d H:i') }}</p>
-                    </div>
+                    
 
                     @if ($user->id !== auth()->id()) <!-- 自分以外のユーザーの場合 -->
                     @if ($user->followers->contains(auth()->id())) <!-- フォロワーリストに自分が含まれている場合 -->

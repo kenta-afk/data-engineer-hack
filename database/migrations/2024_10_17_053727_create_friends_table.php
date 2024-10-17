@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('follow_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('follower_id')->constrained('users')->cascadeOnDelete();
-            $table->unique(['follow_id', 'follower_id']);
+            $table->enum('status', ['pending', 'approved'])->default('pending');
             $table->timestamps();
+
+            // 両方向の重複を避けるための複合一意制約
+            $table->unique(['follow_id', 'follower_id']);
         });
+
     }
 
     /**
