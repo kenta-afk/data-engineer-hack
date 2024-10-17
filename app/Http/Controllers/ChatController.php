@@ -50,5 +50,22 @@ class ChatController extends Controller
 
         return redirect()->back();
     }
+
+    // 特定のユーザーとのチャット数を取得
+    public function chatCount(User $user)
+    {
+        $chatCount = Chat::where(function($query) use ($user) {
+            $query->where('sender_id', auth()->id())
+                ->where('receiver_id', $user->id);
+        })->orWhere(function($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->where('receiver_id', auth()->id());
+        })->count();
+
+        return view('chat.count', [
+            'chatCount' => $chatCount,
+            'receiverId' => $user->id
+        ]);
+    }
 }
 ?>

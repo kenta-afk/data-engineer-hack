@@ -35,6 +35,10 @@ Route::middleware('auth')->group(function () {
 
     // メッセージ送信
     Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+
+    //チャット数カウント
+    Route::get('/chat/count/{user}', [ChatController::class, 'chatCount'])->name('chat.count');
+
 });
 
 require __DIR__ . '/auth.php';
