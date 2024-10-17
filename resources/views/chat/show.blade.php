@@ -14,6 +14,13 @@
                     <!-- チャット数の表示 -->
                     <div class="mb-4 text-center text-sm font-semibold">
                         <p>チャット数: {{ $chats->count() }}</p>
+                        @if($daysSinceFirstChat !== null)
+                            <p>初めてのチャットから経過した日数: {{ floor($daysSinceFirstChat) }} 日</p>
+                        @else
+                            <p>まだチャットがありません。</p>
+                        @endif
+                        <!-- 計算結果の表示 -->
+                        <p>計算結果 (50 - 経過日数 + チャット数): {{ $answer }}</p>
                     </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100 space-y-4">
