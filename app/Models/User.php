@@ -54,8 +54,10 @@ class User extends Authenticatable
     public function followers()
     {
         return $this->belongsToMany(User::class, 'friends', 'follower_id', 'follow_id')
-            ->withTimestamps();
+                    ->withTimestamps()
+                    ->wherePivot('status', 'approved');  // statusがapprovedのフォロワーだけ取得
     }
+
 
 
     public function blocked()
@@ -63,8 +65,34 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_block', 'blocked_id', 'block_id')
             ->withTimestamps();
     }
+
+    
+    // 友達リクエスト
+    public function receivedRequests()
+    {
+        return $this->hasMany(Friend::class, 'follower_id')->where('status', 'pending');
+    }
+
+    public function sentRequests()
+    {
+        return $this->hasMany(Friend::class, 'follow_id')->where('status', 'pending');
+
     public function likes()
     {
         return $this->belongsToMany(Chat::class)->withTimestamps();
+
     }
 }
+
+
+
+
+
+
+    
+
+
+
+
+
+

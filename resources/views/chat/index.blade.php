@@ -14,9 +14,7 @@
                     <a href="{{ route('chat.show', ['user' => $user->id]) }}" class="text-gray-800 dark:text-gray-300 text-lg hover:underline">
                         {{ $user->name }}
                     </a>
-                    <div class="text-gray-600 dark:text-gray-400 text-sm">
-                        <p>アカウント作成日時: {{ $user->created_at->format('Y-m-d H:i') }}</p>
-                    </div>
+                    
                     <!--ブロック-->
                     <div class="flex">
                         @if ($user->blocked->contains(auth()->id()))
