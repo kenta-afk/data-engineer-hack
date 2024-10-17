@@ -63,4 +63,8 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_block', 'blocked_id', 'block_id')
             ->withTimestamps();
     }
+    public function likes()
+    {
+        return $this->belongsToMany(Chat::class)->withTimestamps();
+    }
 }
