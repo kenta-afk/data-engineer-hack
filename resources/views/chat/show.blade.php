@@ -8,28 +8,28 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-gray-900 dark:text-gray-100 space-y-4">
                     @foreach($chats as $chat)
-                    <div class="mb-4 flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
-                        <div class="max-w-xs">
-                            <!-- 名前をメッセージの上に固定 -->
-                            <p class="text-sm font-bold mb-1 {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
-                                {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
-                            </p>
-                            <!-- メッセージ内容 -->
-                            <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
-                                <p class="text-sm">
-                                    {{ $chat->message }}
+                        <div class="flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
+                            <div class="max-w-xs {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                                <!-- メッセージ送信者の名前 -->
+                                <p class="text-sm font-bold mb-1">
+                                    {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
                                 </p>
+                                <!-- メッセージ内容 -->
+                                <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
+                                    <p class="text-sm">
+                                        {{ $chat->message }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
 
             <!-- メッセージ送信フォーム -->
-            <form action="{{ route('chat.send') }}" method="POST">
+            <form action="{{ route('chat.send') }}" method="POST" class="mt-4">
                 @csrf
                 <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
                 <textarea name="message" rows="4" class="w-full dark:bg-gray-800 dark:text-gray-200 rounded-md p-2"></textarea>
