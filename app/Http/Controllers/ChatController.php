@@ -50,6 +50,8 @@ class ChatController extends Controller
             'receiver_id' => $request->receiver_id,
         ]);
 
+        
+
         return redirect()->back();
     }
 }
