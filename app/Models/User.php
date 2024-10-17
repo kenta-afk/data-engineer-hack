@@ -76,7 +76,7 @@ class User extends Authenticatable
     public function sentRequests()
     {
         return $this->hasMany(Friend::class, 'follow_id')->where('status', 'pending');
-
+    }
     public function likes()
     {
         return $this->belongsToMany(Chat::class)->withTimestamps();
