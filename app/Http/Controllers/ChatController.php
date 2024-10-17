@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class ChatController extends Controller
 {
@@ -30,9 +32,28 @@ class ChatController extends Controller
                 ->where('receiver_id', auth()->id());
         })->get();
 
+        // 認証ユーザーと指定ユーザーの間の最初のチャット日を取得
+        $firstChatDate = Chat::where(function($query) use ($user) {
+            $query->where('sender_id', auth()->id())
+                ->where('receiver_id', $user->id);
+        })->orWhere(function($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->where('receiver_id', auth()->id());
+        })->min('created_at');
+
+        // 初回のチャット日からの経過日数を計算
+        $daysSinceFirstChat = $firstChatDate ? Carbon::parse($firstChatDate)->diffInDays(Carbon::now()) : null;
+
+        // チャット数と経過日数で answer を計算
+        $chatCount = $chats->count();
+        $answer = floor(50 - $daysSinceFirstChat + $chatCount);
+
+        // ビューにデータを渡す
         return view('chat.show', [
             'chats' => $chats,
-            'receiverId' => $user->id
+            'receiverId' => $user->id,
+            'daysSinceFirstChat' => $daysSinceFirstChat,
+            'answer' => $answer,
         ]);
     }
 
@@ -49,9 +70,6 @@ class ChatController extends Controller
             'sender_id' => auth()->id(),
             'receiver_id' => $request->receiver_id,
         ]);
-
-        
-
         return redirect()->back();
     }
 
