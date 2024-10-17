@@ -22,6 +22,7 @@
                                     {{ $chat->message }}
                                 </p>
                             </div>
+
                         </div>
                     </div>
                     @endforeach
