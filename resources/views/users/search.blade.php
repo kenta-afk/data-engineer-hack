@@ -31,26 +31,26 @@
           @foreach ($users as $user)
           <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
 
-          <a href="{{ route('profile.show', $user->id) }}" class="gray">
-             {{ $user->name }}
-          </a>
-          @if ($user->id !== auth()->id())
-                    @if ($user->followers->contains(auth()->id()))
-                    <form action="{{ route('friend.destroy', $user) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500 hover:text-red-700">unFollow</button>
-                    </form>
-                    @else
-                    <form action="{{ route('friend.store', $user) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="text-blue-500 hover:text-blue-700">follow</button>
-                    </form>
-                    @endif
+            <a href="{{ route('profile.show', $user->id) }}" class="gray">
+              {{ $user->name }}
+            </a>
+            @if ($user->id !== auth()->id())
+            @if ($user->followers->contains(auth()->id()))
+            <form action="{{ route('friend.approve', $user) }}" method="POST">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="text-red-500 hover:text-red-700">unFollow</button>
+            </form>
+            @else
+            <form action="{{ route('friend.request', $user) }}" method="POST">
+              @csrf
+              <button type="submit" class="text-blue-500 hover:text-blue-700">follow</button>
+            </form>
+            @endif
 
-                    @endif          
+            @endif
 
- 
+
           </div>
           @endforeach
 
