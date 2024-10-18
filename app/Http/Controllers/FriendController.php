@@ -11,13 +11,13 @@ class FriendController extends Controller
 
     public function store(User $user)
     {
-        auth()->user()->follow()->attach($user->id);
+        auth()->user()->follows()->attach($user->id);
         return back(); //
     }
 
     public function destroy(User $user)
     {
-        auth()->user()->follow()->detach($user->id);
+        auth()->user()->follows()->detach($user->id);
         return back(); //
     }
 }
