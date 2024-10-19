@@ -22,25 +22,29 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+    
+    //ユーザー検索
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
     Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+    
 
-
-    //友達リクエスト
+    
     // フォローリクエスト関連のルート
     Route::post('/friend/request/{user}', [UserController::class, 'requestApproval'])->name('friend.request');
     Route::post('/friend/approve/{friend}', [UserController::class, 'approveRequest'])->name('friend.approve');
     Route::delete('/friend/{user}', [UserController::class, 'destroy'])->name('friend.destroy');
 
-
+    //いいね関連
     Route::post('/tweets/{tweet}/like', [LikeController::class, 'like'])->name('chat.like');
     Route::delete('/tweets/{tweet}/dislike', [LikeController::class, 'dislike'])->name('chat.dislike');
 
+    //ユーザーフォロー
     Route::post('/friend/{user}', [FriendController::class, 'store'])->name('friend.store');
     Route::delete('/friend/{user}', [FriendController::class, 'destroy'])->name('friend.destroy');
     
 
 
-    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    //ブロック関連
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
     Route::post('/block/{user}', [BlockController::class, 'store'])->name('block.store');
     Route::delete('/block/{user}', [BlockController::class, 'destroy'])->name('block.destroy');
