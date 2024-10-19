@@ -40,7 +40,26 @@ class ChatController extends Controller
         $request->validate([
             'message' => 'required|string',
             'receiver_id' => 'required|integer|exists:users,id',
+        
+             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 画像のバリデーション   
+
         ]);
+            // 新しいチャットメッセージを作成
+    $chat = new Chat();
+    $chat->sender_id = auth()->id();
+    $chat->receiver_id = $request->receiver_id;
+
+    // メッセージがある場合はセット
+    if ($request->message) {
+        $chat->message = $request->message;
+    }
+
+
+ // 画像がアップロードされた場合
+ if ($request->hasFile('image')) {
+    $path = $request->file('image')->store('images', 'public'); // 画像をストレージに保存
+    $chat->image_path = $path; // 画像のパスを保存
+}
 
         Chat::create([
             'message' => $request->message,
@@ -49,6 +68,21 @@ class ChatController extends Controller
         ]);
 
         return redirect()->back();
-    }
+    
+
+   
+
+    $chat->save();
+
+    return redirect()->back();
+}
+
+public function up()
+{
+    Schema::table('chats', function (Blueprint $table) {
+        $table->string('image_path')->nullable(); // 画像のパスを保存するカラムを追加
+    });
+}
+
 }
 ?>

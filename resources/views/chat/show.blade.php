@@ -21,6 +21,14 @@
                                     <p class="text-sm">
                                         {{ $chat->message }}
                                     </p>
+                                    @if($chat->image_path)  <!-- 画像があれば表示 -->
+                                        <img src="{{ asset('storage/' . $chat->image_path) }}" class="mt-2 max-w-full rounded-lg" alt="Chat Image">
+                                    @endif                                    
+                                    
+                                    
+
+                                    
+
                                 </div>
                             </div>
                         </div>
@@ -29,10 +37,13 @@
             </div>
 
             <!-- メッセージ送信フォーム -->
-            <form action="{{ route('chat.send') }}" method="POST">
+            <form action="{{ route('chat.send') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
                 <textarea name="message" rows="4" class="w-full dark:bg-gray-800 dark:text-gray-200 rounded-md p-2"></textarea>
+                
+                <input type="file" name="image" class="mt-2 w-full" accept="image/*">
+
                 <button type="submit" class="bg-blue-500 text-white p-2 mt-4 rounded-md w-full">Send</button>
             </form>
         </div>
