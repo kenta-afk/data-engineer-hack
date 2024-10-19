@@ -24,6 +24,6 @@ class Chat extends Model
     public function liked()
     {
         // 多対多のリレーションを定義
-        return $this->belongsToMany(User::class, 'user_chat', 'chat_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'chat_user', 'chat_id', 'user_id')->withTimestamps();
     }
 }
