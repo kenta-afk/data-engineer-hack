@@ -39,8 +39,8 @@ Route::middleware('auth')->group(function () {
 
 
     //いいね関連
-    Route::post('/tweets/{tweet}/like', [LikeController::class, 'like'])->name('chat.like');
-    Route::delete('/tweets/{tweet}/dislike', [LikeController::class, 'dislike'])->name('chat.dislike');
+    Route::post('/tweets/{tweet}/like', [LikeController::class, 'like'])->name('chats.like');
+    Route::delete('/tweets/{tweet}/dislike', [LikeController::class, 'dislike'])->name('chats.dislike');
 
 
     //ユーザーフォロー

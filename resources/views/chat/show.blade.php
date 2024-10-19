@@ -37,6 +37,27 @@
                                         {{ $chat->message }}
                                     </p>
                                 </div>
+                                <div class="flex">
+                                    @if ($chat->liked->contains(auth()->id()))
+                                    <form action="{{ route('chats.dislike', $chat) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="chat_id" value="{{ $chat->id }}">
+                                        <button type="submit" class="text-red-500 hover:text-red-700">
+                                            dislike {{ $chat->liked->count() }}
+                                        </button>
+                                    </form>
+                                    @else
+                                    <form action="{{ route('chats.like', $chat) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="chat_id" value="{{ $chat->id }}">
+                                        <button type="submit" class="text-blue-500 hover:text-blue-700">
+                                            like {{ $chat->liked->count() }}
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
+
                             </div>
 
                         </div>
