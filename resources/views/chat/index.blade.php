@@ -14,7 +14,8 @@
                     <a href="{{ route('chat.show', ['user' => $user->id]) }}" class="text-gray-800 dark:text-gray-300 text-lg hover:underline">
                         {{ $user->name }}
                     </a>
-                    
+                    <!-- 各ユーザーの温度を表示 -->
+                    <p>温度: {{ $userTemperatures[$user->id] ?? 50 }}℃</p>
                     <!--ブロック-->
                     <div class="flex">
                         @if ($user->blocked->contains(auth()->id()))

@@ -20,7 +20,7 @@
                             <p>まだチャットがありません。</p>
                         @endif
                         <!-- 計算結果の表示 -->
-                        <p>計算結果 (50 - 経過日数 + チャット数): {{ $answer }}</p>
+                        <p>現在の温度: {{ $answer }}℃</p>
                     </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100 space-y-4">
