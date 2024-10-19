@@ -15,42 +15,42 @@
                     <div class="mb-4 text-center text-sm font-semibold">
                         <p>チャット数: {{ $chats->count() }}</p>
                         @if($daysSinceFirstChat !== null)
-                            <p>初めてのチャットから経過した日数: {{ floor($daysSinceFirstChat) }} 日</p>
+                        <p>初めてのチャットから経過した日数: {{ floor($daysSinceFirstChat) }} 日</p>
                         @else
-                            <p>まだチャットがありません。</p>
+                        <p>まだチャットがありません。</p>
                         @endif
                         <!-- 計算結果の表示 -->
-                        <p>計算結果 (50 - 経過日数 + チャット数): {{ $answer }}</p>
+                        <p>関係性温度: {{ $answer }}</p>
                     </div>
 
-                <div class="p-6 text-gray-900 dark:text-gray-100 space-y-4">
-                    @foreach($chats as $chat)
-                    <div class="flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
-                        <div class="max-w-xs {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
-                            <!-- メッセージ送信者の名前 -->
-                            <p class="text-sm font-bold mb-1">
-                                {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
-                            </p>
-                            <!-- メッセージ内容 -->
-                            <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
-                                <p class="text-sm">
-                                    {{ $chat->message }}
+                    <div class="p-6 text-gray-900 dark:text-gray-100 space-y-4">
+                        @foreach($chats as $chat)
+                        <div class="flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
+                            <div class="max-w-xs {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                                <!-- メッセージ送信者の名前 -->
+                                <p class="text-sm font-bold mb-1">
+                                    {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
                                 </p>
+                                <!-- メッセージ内容 -->
+                                <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
+                                    <p class="text-sm">
+                                        {{ $chat->message }}
+                                    </p>
+                                </div>
                             </div>
+
                         </div>
-
+                        @endforeach
                     </div>
-                    @endforeach
                 </div>
-            </div>
 
-            <!-- メッセージ送信フォーム -->
-            <form action="{{ route('chat.send') }}" method="POST" class="mt-4">
-                @csrf
-                <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
-                <textarea name="message" rows="4" class="w-full dark:bg-gray-800 dark:text-gray-200 rounded-md p-2"></textarea>
-                <button type="submit" class="bg-blue-500 text-white p-2 mt-4 rounded-md w-full">Send</button>
-            </form>
+                <!-- メッセージ送信フォーム -->
+                <form action="{{ route('chat.send') }}" method="POST" class="mt-4">
+                    @csrf
+                    <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
+                    <textarea name="message" rows="4" class="w-full dark:bg-gray-800 dark:text-gray-200 rounded-md p-2"></textarea>
+                    <button type="submit" class="bg-blue-500 text-white p-2 mt-4 rounded-md w-full">Send</button>
+                </form>
+            </div>
         </div>
-    </div>
 </x-app-layout>

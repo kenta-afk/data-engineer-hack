@@ -14,8 +14,13 @@
                     <a href="{{ route('chat.show', ['user' => $user->id]) }}" class="text-gray-800 dark:text-gray-300 text-lg hover:underline">
                         {{ $user->name }}
                     </a>
-                    
-                    <!--ブロック-->
+
+                    <!-- 関係温度計 -->
+                    <div class="mb-4 text-left text-sm font-semibold">
+                        <p> 関係温度計：{{ $user->answer }}</p>
+                    </div>
+
+                    <!-- ブロック -->
                     <div class="flex">
                         @if ($user->blocked->contains(auth()->id()))
                         <form action="{{ route('block.destroy', $user) }}" method="POST">
