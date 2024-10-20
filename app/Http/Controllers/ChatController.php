@@ -16,7 +16,46 @@ class ChatController extends Controller
         // 全てのユーザーを取得
         $users = User::all();
 
-        return view('chat.index', compact('users'));
+        // チャット数と経過日数で温度を計算するために各ユーザーとのデータを取得
+        $userTemperatures = [];
+
+        foreach ($users as $user) {
+            // チャット履歴を取得
+            $chats = Chat::where(function ($query) use ($user) {
+                $query->where('sender_id', auth()->id())
+                    ->where('receiver_id', $user->id);
+            })->orWhere(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->where('receiver_id', auth()->id());
+            })->get();
+
+            // 最初のチャット日を取得
+            $firstChatDate = Chat::where(function($query) use ($user) {
+                $query->where('sender_id', auth()->id())
+                    ->where('receiver_id', $user->id);
+            })->orWhere(function($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->where('receiver_id', auth()->id());
+            })->min('created_at');
+
+            // 経過日数を計算
+            $daysSinceFirstChat = $firstChatDate ? Carbon::parse($firstChatDate)->diffInDays(Carbon::now()) : null;
+
+            // チャット数を取得
+            $chatCount = $chats->count();
+
+            // チャット数と経過日数で温度を計算
+            $temperature = $daysSinceFirstChat !== null ? floor(50 - $daysSinceFirstChat + $chatCount) : null;
+
+            // 計算結果をユーザーごとに保存
+            $userTemperatures[$user->id] = $temperature;
+        }
+
+        // ビューにデータを渡す
+        return view('chat.index', [
+            'users' => $users,
+            'userTemperatures' => $userTemperatures,  // 各ユーザーの温度データ
+        ]);
     }
 
 

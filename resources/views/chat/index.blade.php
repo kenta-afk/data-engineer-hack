@@ -26,10 +26,11 @@
                                     {{ $user->name }}
                                 </a>
 
-                                <!-- 関係温度計 -->
-                                <div class="mb-4 text-left text-sm font-semibold">
-                                    <p> 関係温度計：{{ $user->answer }}</p>
-                                </div>
+
+                                <!-- 各ユーザーの温度を表示 (初期値: 50℃) -->
+                                <p>関係性温度: {{ $userTemperatures[$user->id] ?? 50 }}℃</p>
+
+                            
 
                                 <!-- ブロック -->
                                 <div class="flex">
