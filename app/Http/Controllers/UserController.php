@@ -11,9 +11,12 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = User::with('followers')->get();
+        $users = User::with('followers2')->get();
+        
 
+        
 
+        
         return view('users.index', compact('users'));
     }
     public function destroy(User $follower)

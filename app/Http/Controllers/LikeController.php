@@ -3,18 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    public function like(Chat $chat)
+    public function like(Request $request)
     {
-        $chat->liked()->attach(auth()->id());
+        $chatId = $request->input('chat_id');
+        $chat = Chat::find($chatId);
+
+        if ($chat) {
+            $chat->liked()->attach(auth()->id());
+        }
+
         return back();
     }
 
-    public function dislike(Chat $chat)
+    public function dislike(Request $request)
     {
-        $chat->liked()->detach(auth()->id());
+        $chatId = $request->input('chat_id');
+        $chat = Chat::find($chatId);
+
+        if ($chat) {
+            $chat->liked()->detach(auth()->id());
+        }
+
         return back();
+    }
+
+    public function show()
+    {
+        // 🔽 liked のデータも合わせて取得するよう修正
+        $chat = Chat::with(['user', 'liked'])->latest()->get();
+
+        return view('chat.show', compact('chats'));
     }
 }
