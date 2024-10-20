@@ -12,7 +12,10 @@ class ChatController extends Controller
 {
     // ユーザー一覧を表示
     public function index()
-    {
+    {   
+        // 認証ユーザーを取得
+        $authUser = auth()->user();
+
         // 全てのユーザーを取得
         $users = User::all();
 
@@ -49,6 +52,12 @@ class ChatController extends Controller
 
             // 計算結果をユーザーごとに保存
             $userTemperatures[$user->id] = $temperature;
+
+            // 温度が -50℃ 以下の場合、相互フォローを解除
+            if ($temperature <= -50) {
+                $authUser->unfollow($user);
+                $user->unfollow($authUser);
+            }
         }
 
         // ビューにデータを渡す
@@ -56,12 +65,17 @@ class ChatController extends Controller
             'users' => $users,
             'userTemperatures' => $userTemperatures,  // 各ユーザーの温度データ
         ]);
+
+        // 計算結果をユーザーごとに保存
+        $userTemperatures[$user->id] = $temperature;
     }
 
 
     // 選択したユーザーとのチャットを表示
     public function show(User $user)
     {
+        // 認証ユーザーを取得
+        $authUser = auth()->user();
         // 認証ユーザーと選択されたユーザーとのチャット履歴を取得
         $chats = Chat::where(function ($query) use ($user) {
             $query->where('sender_id', auth()->id())
@@ -86,6 +100,13 @@ class ChatController extends Controller
         // チャット数と経過日数で answer を計算
         $chatCount = $chats->count();
         $answer = floor(50 - $daysSinceFirstChat + $chatCount);
+
+        // 温度が -50℃ 以下の場合、相互フォローを解除
+        if ($answer <= -50) {
+            $authUser = auth()->user();
+            $authUser->unfollow($user);
+            $user->unfollow($authUser);
+        }
 
         // ビューにデータを渡す
         return view('chat.show', [
