@@ -19,16 +19,16 @@
                     <!--ブロック-->
                     <div class="flex">
                         @if ($user->blocked->contains(auth()->id()))
-                        <form action="{{ route('block.destroy', $user) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500 hover:text-red-700">ブロックを解除する</button>
-                        </form>
+                            <form action="{{ route('block.destroy', $user) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700">ブロックを解除する</button>
+                            </form>
                         @else
-                        <form action="{{ route('block.store', $user) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="text-blue-500 hover:text-blue-700">ブロックする</button>
-                        </form>
+                            <form action="{{ route('block.store', $user) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-blue-500 hover:text-blue-700">ブロックする</button>
+                            </form>
                         @endif
                     </div>
                 </div>
