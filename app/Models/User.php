@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,38 +44,37 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // フォローしているユーザーとの関係
     public function follows()
     {
         return $this->belongsToMany(User::class, 'friends', 'follow_id', 'follower_id')
             ->withTimestamps();
     }
 
+    // フォローされているユーザーとの関係
     public function followers()
     {
         return $this->belongsToMany(User::class, 'friends', 'follower_id', 'follow_id')
-                    ->withTimestamps()
-                    ->wherePivot('status', 'approved');  // statusがapprovedのフォロワーだけ取得
+            ->withTimestamps()
+            ->wherePivot('status', 'approved');  // statusがapprovedのフォロワーだけ取得
     }
 
-
-    //承認待ちのリレーション
+    // 承認待ちのリレーション
     public function followers2()
     {
         return $this->belongsToMany(User::class, 'friends', 'follower_id', 'follow_id')
-                    ->withTimestamps()
-                    ->withPivot('status');  // ここでpivotにstatusを含める
+            ->withTimestamps()
+            ->withPivot('status');  // ここでpivotにstatusを含める
     }
 
-
-
-
+    // ブロックしているユーザーとの関係
     public function blocked()
     {
         return $this->belongsToMany(User::class, 'user_block', 'blocked_id', 'block_id')
             ->withTimestamps();
     }
 
-    
     // 友達リクエスト
     public function receivedRequests()
     {
@@ -87,12 +85,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Friend::class, 'follow_id')->where('status', 'pending');
     }
+
+    // チャットに対する「いいね」のリレーション
     public function likes()
     {
         return $this->belongsToMany(Chat::class)->withTimestamps();
+    }
 
+    // フォロー解除メソッド
+    public function unfollow(User $user)
+    {
+        // フォロー解除（リレーションを削除）
+        $this->follows()->detach($user->id);
     }
 }
-
-
-
