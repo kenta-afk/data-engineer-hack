@@ -50,7 +50,6 @@ class ChatController extends Controller
             // 計算結果をユーザーごとに保存
             $userTemperatures[$user->id] = $temperature;
         }
-        
 
         // ビューにデータを渡す
         return view('chat.index', [
@@ -73,10 +72,10 @@ class ChatController extends Controller
         })->get();
 
         // 認証ユーザーと指定ユーザーの間の最初のチャット日を取得
-        $firstChatDate = Chat::where(function($query) use ($user) {
+        $firstChatDate = Chat::where(function ($query) use ($user) {
             $query->where('sender_id', auth()->id())
                 ->where('receiver_id', $user->id);
-        })->orWhere(function($query) use ($user) {
+        })->orWhere(function ($query) use ($user) {
             $query->where('sender_id', $user->id)
                 ->where('receiver_id', auth()->id());
         })->min('created_at');
@@ -84,7 +83,7 @@ class ChatController extends Controller
         // 初回のチャット日からの経過日数を計算
         $daysSinceFirstChat = $firstChatDate ? Carbon::parse($firstChatDate)->diffInDays(Carbon::now()) : null;
 
-        // チャット数と経過日数で温度を計算
+        // チャット数と経過日数で answer を計算
         $chatCount = $chats->count();
         $answer = floor(50 - $daysSinceFirstChat + $chatCount);
 
@@ -116,10 +115,10 @@ class ChatController extends Controller
     // 特定のユーザーとのチャット数を取得
     public function chatCount(User $user)
     {
-        $chatCount = Chat::where(function($query) use ($user) {
+        $chatCount = Chat::where(function ($query) use ($user) {
             $query->where('sender_id', auth()->id())
                 ->where('receiver_id', $user->id);
-        })->orWhere(function($query) use ($user) {
+        })->orWhere(function ($query) use ($user) {
             $query->where('sender_id', $user->id)
                 ->where('receiver_id', auth()->id());
         })->count();

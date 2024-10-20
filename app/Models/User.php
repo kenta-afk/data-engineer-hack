@@ -59,6 +59,16 @@ class User extends Authenticatable
     }
 
 
+    //承認待ちのリレーション
+    public function followers2()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'follower_id', 'follow_id')
+                    ->withTimestamps()
+                    ->withPivot('status');  // ここでpivotにstatusを含める
+    }
+
+
+
 
     public function blocked()
     {
@@ -83,16 +93,6 @@ class User extends Authenticatable
 
     }
 }
-
-
-
-
-
-
-    
-
-
-
 
 
 
