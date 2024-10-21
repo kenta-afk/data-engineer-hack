@@ -50,6 +50,11 @@ class ChatController extends Controller
             // チャット数と経過日数で温度を計算
             $temperature = $daysSinceFirstChat !== null ? floor(50 - $daysSinceFirstChat + $chatCount) : null;
 
+            // 温度を -50℃から50℃に制限
+            if ($temperature !== null) {
+                $temperature = max(-50, min(50, $temperature));
+            }
+
             // 計算結果をユーザーごとに保存
             $userTemperatures[$user->id] = $temperature;
 
@@ -100,6 +105,9 @@ class ChatController extends Controller
         // チャット数と経過日数で answer を計算
         $chatCount = $chats->count();
         $answer = floor(50 - $daysSinceFirstChat + $chatCount);
+
+        // 温度を -50℃から50℃に制限
+        $answer = max(-50, min(50, $answer));
 
         // 温度が -50℃ 以下の場合、相互フォローを解除
         if ($answer <= -50) {
