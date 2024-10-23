@@ -48,7 +48,7 @@ class ChatController extends Controller
             $chatCount = $chats->count();
 
             // チャット数と経過日数で温度を計算
-            $temperature = $daysSinceFirstChat !== null ? floor(50 - $daysSinceFirstChat + $chatCount) : null;
+            $temperature = $daysSinceFirstChat !== null ? floor(0 - $daysSinceFirstChat + $chatCount) : null;
 
             // 温度を -50℃から50℃に制限
             if ($temperature !== null) {
@@ -104,7 +104,7 @@ class ChatController extends Controller
 
         // チャット数と経過日数で answer を計算
         $chatCount = $chats->count();
-        $answer = floor(50 - $daysSinceFirstChat + $chatCount);
+        $answer = floor(0 - $daysSinceFirstChat + $chatCount);
 
         // 温度を -50℃から50℃に制限
         $answer = max(-50, min(50, $answer));
