@@ -57,6 +57,9 @@
                                     <p class="text-sm">
                                         {{ $chat->message }}
                                     </p>
+                                    @if ($chat->image) <!-- 画像が存在する場合 -->
+                                        <img src="{{ asset('storage/' . $chat->image) }}" alt="Chat Image" class="mt-2 max-w-xs rounded-lg">
+                                    @endif
                                 </div>
                                 <div class="flex">
                                     @if ($chat->liked->contains(auth()->id()))
@@ -85,12 +88,14 @@
                 </div>
 
                 <!-- メッセージ送信フォーム -->
-                <form action="{{ route('chat.send') }}" method="POST" class="relative mt-4" style="z-index: 2;">
+                <form action="{{ route('chat.send') }}" method="POST" enctype="multipart/form-data" class="mt-4">
                     @csrf
                     <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
-                    <textarea name="message" rows="4" class="w-full dark:bg-gray-800 dark:text-gray-200 rounded-md p-2"></textarea>
-                    <button type="submit" class="bg-blue-500 text-white p-2 mt-4 rounded-md w-full">Send</button>
+                    <textarea name="message" rows="4" class="w-full dark:bg-gray-800 dark:text-gray-200 rounded-md p-2" placeholder="メッセージを入力..."></textarea>
+                    <input type="file" name="image" accept="image/*" class="mt-2">
+                    <button type="submit" class="bg-blue-500 text-white p-2 mt-4 rounded-md w-full">送信</button>
                 </form>
+
             </div>
         </div>
     </div>

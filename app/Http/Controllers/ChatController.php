@@ -131,6 +131,7 @@ class ChatController extends Controller
         $request->validate([
             'message' => 'required|string',
             'receiver_id' => 'required|integer|exists:users,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 画像のバリデーション
         ]);
 
         Chat::create([
@@ -138,6 +139,13 @@ class ChatController extends Controller
             'sender_id' => auth()->id(),
             'receiver_id' => $request->receiver_id,
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('chat_images', 'public'); // 画像をストレージに保存
+            $chat->image = $path; // 画像のパスを保存
+            $chat->save();
+        }
+
         return redirect()->back();
     }
 
