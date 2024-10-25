@@ -13,6 +13,7 @@
                     $isFollowerApproved = $user->followers2->where('id', auth()->id())->first();
                     // 相手がログインユーザーをフォローしているかチェック
                     $isFollowingApproved = auth()->user()->followers2->where('id', $user->id)->first();
+
                 @endphp
                 
                 @if ($isFollowerApproved && $isFollowingApproved 
@@ -27,7 +28,7 @@
                                 </a>
 
 
-                                <!-- 各ユーザーの温度を表示 (初期値: 50℃) -->
+                                <!-- 各ユーザーの温度を表示 (初期値: 0℃) -->
                                 <p>関係性温度: {{ $userTemperatures[$user->id] ?? 0 }}℃</p>
 
                             

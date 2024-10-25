@@ -98,4 +98,6 @@ class User extends Authenticatable
         // フォロー解除（リレーションを削除）
         $this->follows()->detach($user->id);
     }
+
+    
 }
