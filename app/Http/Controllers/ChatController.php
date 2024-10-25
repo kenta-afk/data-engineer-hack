@@ -62,6 +62,17 @@ class ChatController extends Controller
             if ($temperature <= -50) {
                 $authUser->unfollow($user);
                 $user->unfollow($authUser);
+                
+                
+                // チャット履歴を削除
+                Chat::where(function ($query) use ($user) {
+                    $query->where('sender_id', auth()->id())
+                        ->where('receiver_id', $user->id);
+                })->orWhere(function ($query) use ($user) {
+                    $query->where('sender_id', $user->id)
+                        ->where('receiver_id', auth()->id());
+                })->delete();
+                
             }
         }
 
@@ -114,6 +125,17 @@ class ChatController extends Controller
             $authUser = auth()->user();
             $authUser->unfollow($user);
             $user->unfollow($authUser);
+
+            
+            // チャット履歴を削除
+            Chat::where(function ($query) use ($user) {
+                $query->where('sender_id', auth()->id())
+                    ->where('receiver_id', $user->id);
+            })->orWhere(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->where('receiver_id', auth()->id());
+            })->delete();
+            
         }
 
         // ビューにデータを渡す
