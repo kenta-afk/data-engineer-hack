@@ -19,10 +19,16 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Chat with User') }}
-        </h2>
+
+
+        <form action="{{ route('chat.index') }}" method="GET">
+            <button type="submit" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                戻る
+            </button>
+        </form>
     </x-slot>
+    
+
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -64,7 +70,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <input type="hidden" name="chat_id" value="{{ $chat->id }}">
-                                        <button type="submit" class="text-red-500 hover:text-red-700">
+                                        <button type="submit" class="text-black-500 hover:text-red-700">
                                             dislike {{ $chat->liked->count() }}
                                         </button>
                                     </form>
@@ -72,7 +78,7 @@
                                     <form action="{{ route('chats.like', $chat) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="chat_id" value="{{ $chat->id }}">
-                                        <button type="submit" class="text-blue-500 hover:text-blue-700">
+                                        <button type="submit" class="text-black-500 hover:text-blue-700">
                                             like {{ $chat->liked->count() }}
                                         </button>
                                     </form>
