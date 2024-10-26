@@ -19,26 +19,19 @@
 
 <x-app-layout>
     <x-slot name="header">
-
-
-        <form action="{{ route('chat.index') }}" method="GET">
+        <form action="{{ route('chat.index') }}" method="GET" style="position: fixed; top: 1rem; left: 1rem; z-index: 10;">
             <button type="submit" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 戻る
             </button>
         </form>
     </x-slot>
-    
-
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="relative bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <!-- 背景にぼかしを適用 -->
                 <div class="absolute inset-0" style="background-color: {{ $backgroundColor }}; filter: blur(15px); z-index: 1;"></div>
                 
-                <!-- コンテンツはぼかさない -->
-                <div class="relative p-6 text-gray-900 dark:text-gray-100" style="z-index: 2;">
-                    <!-- チャット数の表示 -->
+                <div id="chat-container" class="relative p-6 text-gray-900 dark:text-gray-100 space-y-4" style="z-index: 2; max-height: 500px; overflow-y: auto;">
                     <div class="mb-4 text-center text-sm font-semibold">
                         <p>チャット数: {{ $chats->count() }}</p>
                         @if($daysSinceFirstChat !== null)
@@ -46,51 +39,45 @@
                         @else
                         <p>まだチャットがありません。</p>
                         @endif
-                        <!-- 計算結果の表示 -->
                         <p>関係性温度: {{ $answer }}℃</p>
                     </div>
 
-                    <div class="p-6 text-gray-900 dark:text-gray-100 space-y-4">
-                        @foreach($chats as $chat)
-                        <div class="flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
-                            <div class="max-w-xs {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
-                                <!-- メッセージ送信者の名前 -->
-                                <p class="text-sm font-bold mb-1">
-                                    {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
+                    @foreach($chats as $chat)
+                    <div class="flex {{ $chat->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
+                        <div class="max-w-xs {{ $chat->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                            <p class="text-sm font-bold mb-1">
+                                {{ $chat->sender_id === auth()->id() ? auth()->user()->name : $chat->sender->name }}
+                            </p>
+                            <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
+                                <p class="text-sm">
+                                    {{ $chat->message }}
                                 </p>
-                                <!-- メッセージ内容 -->
-                                <div class="{{ $chat->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }} p-3 rounded-lg">
-                                    <p class="text-sm">
-                                        {{ $chat->message }}
-                                    </p>
-                                </div>
-                                <div class="flex">
-                                    @if ($chat->liked->contains(auth()->id()))
-                                    <form action="{{ route('chats.dislike', $chat) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <input type="hidden" name="chat_id" value="{{ $chat->id }}">
-                                        <button type="submit" class="text-black-500 hover:text-red-700">
-                                            dislike {{ $chat->liked->count() }}
-                                        </button>
-                                    </form>
-                                    @else
-                                    <form action="{{ route('chats.like', $chat) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="chat_id" value="{{ $chat->id }}">
-                                        <button type="submit" class="text-black-500 hover:text-blue-700">
-                                            like {{ $chat->liked->count() }}
-                                        </button>
-                                    </form>
-                                    @endif
-                                </div>
+                            </div>
+                            <div class="flex">
+                                @if ($chat->liked->contains(auth()->id()))
+                                <form action="{{ route('chats.dislike', $chat) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="chat_id" value="{{ $chat->id }}">
+                                    <button type="submit" class="text-black-500 hover:text-red-700">
+                                        dislike {{ $chat->liked->count() }}
+                                    </button>
+                                </form>
+                                @else
+                                <form action="{{ route('chats.like', $chat) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="chat_id" value="{{ $chat->id }}">
+                                    <button type="submit" class="text-black-500 hover:text-blue-700">
+                                        like {{ $chat->liked->count() }}
+                                    </button>
+                                </form>
+                                @endif
                             </div>
                         </div>
-                        @endforeach
                     </div>
+                    @endforeach
                 </div>
 
-                <!-- メッセージ送信フォーム -->
                 <form action="{{ route('chat.send') }}" method="POST" class="relative mt-4" style="z-index: 2;">
                     @csrf
                     <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
@@ -100,4 +87,28 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function scrollToBottom() {
+            var chatContainer = document.getElementById("chat-container");
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            scrollToBottom();
+        });
+
+        document.querySelector("form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var form = this;
+
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form),
+            }).then(() => {
+                form.reset();
+                scrollToBottom();
+            });
+        });
+    </script>
 </x-app-layout>
